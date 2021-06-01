@@ -74,10 +74,15 @@ const usuarioPatch = (req = request, res = response) => {
     });
 }
 
-const usuarioDelete = (req = request, res = response) => {
+const usuarioDelete = async(req = request, res = response) => {
+
+    const { id } = req.params;
+
+    const usuario = await Usuario.findByIdAndUpdate(id, { estado: false })
+
     res.json({
-        ok: true,
-        msg: 'Delete  API - Controller'
+        msg: 'Delete  API - Controller',
+        usuario
     });
 }
 
