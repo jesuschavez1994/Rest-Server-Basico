@@ -34,7 +34,8 @@ const usuarioSchema = Schema({
 });
 // Metodo para no mostrar el password en la respuesta del backend y la version: __v
 usuarioSchema.methods.toJSON = function(){
-    const { __v, password, ...usuario } = this.toObject();
+    const { __v, password, _id, ...usuario } = this.toObject();
+    usuario.uid = _id;
     return usuario;
 }
 module.exports = model('Usuario', usuarioSchema);
