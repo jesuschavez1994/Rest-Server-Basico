@@ -19,7 +19,7 @@ const  usuariosGet = async(req = request, res = response ) => {
         msg: 'Get API - Controller',
         total,
         usuarios
-    })
+    });
 }
 
 const usuarioPost = async(req = request, res = response) => {
