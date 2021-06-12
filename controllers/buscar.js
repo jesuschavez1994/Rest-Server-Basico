@@ -10,7 +10,6 @@ const colesccionesPermitidas = [
     'usuarios',
 ]
 
-
 const buscarCategorias = async( termino = '', res = response) => {
 
     const isMongoId = ObjectId.isValid( termino ) // Devuelve true || false si es un id valido 

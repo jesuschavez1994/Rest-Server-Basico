@@ -74,5 +74,68 @@
         }
     </script>
 
+
+<script>
+
+    let body = document.body;
+    let inputFile;
+    
+
+    const crearInputFile = () => {
+
+        const html = `
+            <h1> Subir archivos </h1>
+            <hr/>
+            <input type="file" accept="img/jpeg, img/png">
+        `;
+
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        body.append(div);
+
+        inputFile = document.querySelector('input');
+    }
+
+    const evento = () => {
+        inputFile.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            console.log(file);
+            enviarImagen(file).then( resp => {
+                console.log(resp);
+            })
+        })
+    }
+
+    const enviarImagen = async(imagen) => {
+
+        const url = 'http://localhost:8080/api/uploads';
+        const myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'multipart/form-data');
+        const form = new FormData();
+        form.append('image', imagen);
+
+        try{
+            const response = await fetch(url, {
+                method: 'POST',
+                //headers: myHeaders,
+                body: form
+            });
+
+            if(response.ok){
+                const resOk = await response.json();
+                console.log(resOk);
+            }else{
+                throw await response.json()
+            }
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+    crearInputFile();
+    evento();
+
+</script>
+
 </body>
 </html>

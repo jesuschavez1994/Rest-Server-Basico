@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors');
 const { dbconeccton } = require('../database/config');
+const bodyParser = require('body-parser')
 
 class Server {
 
@@ -9,11 +10,12 @@ class Server {
         this.port = process.env.PORT;
 
         this.path = {
-            auth:                       '/api/auth',
-            buscar:                     '/api/buscar',
-            categorias:                 '/api/categorias',
-            productos:                  '/api/productos',
-            usuarios:                   '/api/usuarios'
+            auth:           '/api/auth',
+            buscar:         '/api/buscar',
+            categorias:     '/api/categorias',
+            productos:      '/api/productos',
+            usuarios:       '/api/usuarios',
+            uploads:        '/api/uploads'
         }
 
         //conectar DB
@@ -24,6 +26,12 @@ class Server {
 
         // Rutas de mi aplicacion
         this.routes();
+
+        // FileUpload - carga de archivo
+        // this.app.use(fileUpload({
+        //     useTempFiles : true,
+        //     tempFileDir : '/tmp/'
+        // }));
     }
 
     async conectDB(){
@@ -41,6 +49,7 @@ class Server {
 
         // Directorio Publicos
         this.app.use( express.static('public'));
+
     }
 
     routes(){
@@ -49,6 +58,7 @@ class Server {
         this.app.use(this.path.categorias, require('../routes/categorias'));
         this.app.use(this.path.productos, require('../routes/productos'));
         this.app.use(this.path.usuarios, require('../routes/user'));
+        this.app.use(this.path.uploads, require('../routes/uploads'));
     }
 
     start(){
