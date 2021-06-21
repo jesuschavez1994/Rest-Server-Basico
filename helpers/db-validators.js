@@ -1,4 +1,5 @@
 
+const { response } = require('express');
 const { Producto, Categoria, Role, Usuario } = require('../models')
 
 
@@ -42,6 +43,22 @@ const existeproductoPorId = async( id ) => {
     }
 }
 
+/**
+ * Validar colecciones Permitidas
+ */
+
+ const coleccionesPermitidas = async(coleccion = '', colecciones = [] ) => {
+
+    const incluida = colecciones.includes(coleccion);
+
+    if(!incluida){
+        throw new Error(`La colección ${ coleccion } no es permitida, ${colecciones}`);
+    }else{
+       return true;
+    }
+
+ }
+
     
 
 module.exports = { 
@@ -49,5 +66,6 @@ module.exports = {
     isEmailEsxist,
     existeUsuarioPorId,
     existeCategoriaPorId,
-    existeproductoPorId
+    existeproductoPorId,
+    coleccionesPermitidas
 }

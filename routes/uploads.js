@@ -1,27 +1,19 @@
-const { Router, request } = require('express');
-const multer = require('multer');
+const { Router } = require('express');
+const { check } = require('express-validator');
+const { cargarArchivo, ActualizarImagen } = require('../controllers/uploads');
+const { coleccionesPermitidas } = require('../helpers/db-validators');
+const { upload } = require('../helpers/subir-archivo');
+const { validarCampos } = require('../middlewares');
 
 const router = Router();
 
-const filesStorageEngine = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, './uploads')
-    },
-    filename: function (req, file, callback) {
-        callback(null, Date.now() + '-' + file.originalname)
-    }
-})
-const upload = multer({ storage: filesStorageEngine }).single('image');
+router.post('/', upload, cargarArchivo);
 
-router.post('/', upload, (req = request, res) => {
-  console.log(req.file); // JSON Object
+router.put('/:coleccion/:id', [
+    check('id', 'El id debe de ser un id valido de Mongo').isMongoId(),
+    check('coleccion').custom( c => coleccionesPermitidas(c, ['usuarios', 'productos'])),
+    validarCampos
+], ActualizarImagen)
 
-  if(req.file){
-      const { originalname } = req.file;
-      res.status(200).json({
-          msg: `Se ha guardado el archivo ${originalname}`
-      })
-  }
-});
 
 module.exports = router;
